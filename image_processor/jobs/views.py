@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+from .models import ProcessingJob
+from .serializers import ProcessingJobSerializer
+
+
+class JobCreateView(generics.CreateAPIView):
+    queryset = ProcessingJob.objects.all()
+    serializer_class = ProcessingJobSerializer
+
+
+class JobDetailView(generics.RetrieveAPIView):
+    queryset = ProcessingJob.objects.all()
+    serializer_class = ProcessingJobSerializer

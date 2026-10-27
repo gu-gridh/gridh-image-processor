@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import json
 from pathlib import Path
 
 import environ
@@ -29,20 +30,17 @@ ALLOWED_HOSTS = env.list(
     default=["localhost", "127.0.0.1"],
 )
 
-DATABASES = {
-    "default": env.db("DATABASE_URL")
-}
-
-
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'jobs',
 ]
 
 MIDDLEWARE = [
@@ -79,10 +77,7 @@ WSGI_APPLICATION = 'image_processor.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db("DATABASE_URL")
 }
 
 
@@ -131,3 +126,16 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+PROJECTS_CONFIG_FILE = BASE_DIR / "image_processor" / "projects_config.json"
+
+with open(PROJECTS_CONFIG_FILE) as f:
+    PROJECTS = json.load(f)
+
+PROJECT_ROOTS = {
+    name: config["storage_root"]
+    for name, config in PROJECTS.items()
+}
+
+PANORAMA_CONTAINER_IMAGE = env("PANORAMA_CONTAINER_IMAGE")
+PANORAMA_TIMEOUT = 600

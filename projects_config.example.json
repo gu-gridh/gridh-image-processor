@@ -1,0 +1,10 @@
+{
+    "project1": {
+        "storage_root": "/example/path/to/project1",
+        "allowed_jobs": ["panorama"]
+    },
+    "project2": {
+        "storage_root": "/example/path/to/project2",
+        "allowed_jobs": ["iiif", "panorama"]
+    }
+}

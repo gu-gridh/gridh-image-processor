@@ -8,16 +8,16 @@ services:
       POSTGRES_PASSWORD: /run/secrets/local_db_password
     secrets:
       - local_db_password
-
-secrets:
-  local_db_password:
-    file: .secrets/local_db.txt
-
+    
     ports:
       - "127.0.0.1:5433:5432"
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+secrets:
+  local_db_password:
+    file: .secrets/local_db.txt
 
 volumes:
   postgres_data:
