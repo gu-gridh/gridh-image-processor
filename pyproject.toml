@@ -1,7 +1,7 @@
 [project]
 name = "gridh-image-processor"
 version = "0.1.0"
-description = "Add your description here"
+description = "Run image processing tasks for other django projects as background tasks."
 readme = "README.md"
 authors = [
     { name = "j4lib", email = "julia.beck@lir.gu.se" }
