@@ -19,15 +19,15 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / ".env")
+environ.Env.read_env(BASE_DIR / '.env')
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env.bool("DEBUG", default=False)
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS",
-    default=["localhost", "127.0.0.1"],
+    'ALLOWED_HOSTS',
+    default=['localhost', '127.0.0.1'],
 )
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'jobs',
 ]
 
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'image_processor.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    "default": env.db("DATABASE_URL")
+    'default': env.db('DATABASE_URL')
 }
 
 
@@ -127,15 +128,15 @@ MAILERS = {
     },
 }
 
-PROJECTS_CONFIG_FILE = BASE_DIR / "image_processor" / "projects_config.json"
+PROJECTS_CONFIG_FILE = BASE_DIR / 'image_processor' / 'projects_config.json'
 
 with open(PROJECTS_CONFIG_FILE) as f:
     PROJECTS = json.load(f)
 
 PROJECT_ROOTS = {
-    name: config["storage_root"]
+    name: config['storage_root']
     for name, config in PROJECTS.items()
 }
 
-PANORAMA_CONTAINER_IMAGE = env("PANORAMA_CONTAINER_IMAGE")
+PANORAMA_CONTAINER_IMAGE = env('PANORAMA_CONTAINER_IMAGE')
 PANORAMA_TIMEOUT = 600
