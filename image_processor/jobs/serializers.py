@@ -29,6 +29,7 @@ class ProcessingJobSerializer(serializers.ModelSerializer):
 
         read_only_fields = (
             "id",
+            "project",
             "status",
             "error_message",
             "created_at",
@@ -37,10 +38,18 @@ class ProcessingJobSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        job = SimpleNamespace(**attrs)
+        project = self.context["request"].user.username
+
+        job = SimpleNamespace(
+            project=project,
+            job_type=attrs["job_type"],
+            original=attrs["original"],
+            target=attrs["target"],
+        )
 
         try:
             resolve_job_paths(job)
+
         except InvalidJobPath as exc:
             raise serializers.ValidationError(
                 {"path": str(exc)}
