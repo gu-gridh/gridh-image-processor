@@ -17,10 +17,6 @@ def generate_panorama(job):
     # validate paths
     original, target = resolve_job_paths(job)
 
-    # do not overwrite existing panorama output
-    if target.exists():
-        raise FileExistsError(f"target already exists: {target}")
-
     # create temp output directory to not expose partially generated panorama
     target.parent.mkdir(parents=True, exist_ok=True)
 
@@ -81,8 +77,30 @@ def generate_panorama(job):
         if "multiRes" not in config:
             raise RuntimeError("Invalid Pannellum configuration")
 
-        # Publish completed output.
-        generated.rename(target)
+        # Publish completed output, replace existing panorama.
+        backup = target.with_name(f".{target.name}.backup-{job.id}")
+
+        if backup.exists():
+            raise FileExistsError(f"Backup already exists: {backup}")
+
+        if target.exists():
+            if not target.is_dir():
+                raise RuntimeError("Target is not a directory")
+
+            target.rename(backup)
+
+        try:
+            generated.rename(target)
+        except Exception:
+            # Restore previous panorama if publishing fails.
+            if backup.exists() and not target.exists():
+                backup.rename(target)
+            raise
+
+        else:
+            # Remove previous panorama after successful replacement.
+            if backup.exists():
+                shutil.rmtree(backup)
 
         return target / "config.json"
 

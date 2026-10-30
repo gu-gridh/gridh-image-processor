@@ -74,7 +74,7 @@ def resolve_job_paths(job):
 
     if not target_path.is_relative_to(root):
         raise InvalidJobPath("Target outside project storage")
-    if target_path.exists():
-        raise InvalidJobPath("Target already exists")
+    if target_path.exists() and not target_path.is_dir():
+        raise InvalidJobPath("Target must be a directory")
 
     return original_path, target_path
